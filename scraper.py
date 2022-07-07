@@ -5,18 +5,14 @@ url = "https://en.wikipedia.org/wiki/History_of_Mexico#cite_note-133"
 
 
 def get_citations_needed_count(url_string):
-    page = requests.get(url_string)
-    soup = BeautifulSoup(page.content, "html.parser")
-    tags = soup.find(class_="vector-body")
-    p_tags = tags.find_all("p")
-
+    r = requests.get(url_string)
+    soup = BeautifulSoup(r.content, 'html.parser')
+    ps = soup.find_all("p")
     counter = 0
-
-    for tag_p in p_tags:
-        content = tag_p.text
-        if "citation needed" in content:
-            counter += 1
-
+    for paragraph in ps:
+        span = paragraph.find_all('span')
+        if span:
+            counter += len(span)
     return counter
 
 
